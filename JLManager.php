@@ -55,6 +55,7 @@
 		.nav .menu li a {text-decoration:none;}
 		.nav .menu li a:hover {text-decoration:underline;}
 		.file_manager {background:#ccc;width:98%;max-width:480px;height:100%;padding:5px;margin:auto;border:#00cccc 3px dashed;}
+		.upload_panel {display:none;}
 		@media screen and (min-width:480px) {
 			body {margin:2%}
 			.floater {margin-bottom:-30px}
@@ -63,6 +64,7 @@
 			.login_meta input {width:99%;height:38px}
 			.login_btn {wdith:30%;height:50px}
 			.login_btn input {margin:0;width:60px;max-width:100%;height:38px}
+			.upload_panel {display:block}
 		}
 		@media screen and (min-width:320px) and (max-width: 479px) {
 			body {margin:10px}
@@ -96,7 +98,6 @@
 <body>
 <?php
 	if (!$logged) {
-	//没登录就显示登录Form
 ?>
 <div class="floater"></div>
 <div class="login_form">
@@ -108,20 +109,28 @@
 </div>
 <?php 
 	} else if ($logged) {
-	//登录了就显示文件管理
 ?>
 	<div class="file_manager">
-	<table>
+	<form action="<?php get_filename() ?>" method="post">
+		<div class="upload_panel">
+			<label for="userfile">选择需要上传的文件:</label>
+			<input type="file" />
+			<input type="submit" value="确定上传" />
+		</div>
+	</form>
+	<table class="file_list" width="100%">
 	<tbody>
 		<tr>
-			<td width="100%">文件（夹）名</td>
+			<td width="40%">名称</td>
+			<td width="20%">大小</td>
+			<td width="40%">操作</td>
 		</tr>
 <?php
 		$fileList = array();
 		$fileList = scandir($base_dir.$post_dir);
 		foreach($fileList as $temp) {
-			if ($temp == ".") continue;
-			//跳过没用的"."目录
+		if ($temp == ".") continue;
+			$filesize = NULL;
 			switch (is_dir(str_replace("/","\\",$base_dir).str_replace("/","\\",$post_dir)."\\".$temp)) {
 				case true:
 				if ($temp == "..") {
@@ -133,11 +142,15 @@
 				//修正多添加上的"/"
 				break;
 				case false;
+				$filesize = round(filesize($base_dir.$post_dir."\\".$temp)/1024)."KB";
+				//只有文件才能用filesize取尺寸
 				$temp = "<p>".$temp."</p>";
 				break;
 			}
 			echo "<tr>
 					<td>".$temp."</td>
+					<td>".$filesize."</td>
+					<td></td>
 				  </tr>";
 		}
 	}
