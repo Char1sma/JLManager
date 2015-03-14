@@ -172,6 +172,7 @@
 				if ($filename == "..") {
 					$filename = dirname($post_dir);
 					$filename = "<a href=\"".get_filename()."?dir=".$filename."\">../</a>";
+					$operation = NULL;
 					break;
 				}
 				$filename = "<a href=\"".get_filename()."?dir=".str_replace("\\\\","\\",$post_dir."\\".$filename)."\">$filename</a>";
