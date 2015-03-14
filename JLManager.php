@@ -6,7 +6,7 @@
  * @license    GNU General Public License 3.0
  * @version    0.2beta2
  */
-	define("__PASSWORD__","1");
+	define("__PASSWORD__","5ylkZZpzPii9RLZ0");
 	define("__MENU_BUTTON__","data:image/png;base64,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");
 	session_start();
 	global $base_dir,$post_dir;
@@ -31,7 +31,7 @@
 		//文件上传处理
 		if ($_FILES['userfile']['error']>0) exit;
 		if (is_uploaded_file($_FILES['userfile']['tmp_name'])) {
-			if(!move_uploaded_file($_FILES['userfile']['tmp_name'],$base_dir.$post_dir."\\".$_FILES['userfile']['name'])) exit;
+			if(!move_uploaded_file($_FILES['userfile']['tmp_name'],str_replace("//","/",$base_dir.$post_dir."/".$_FILES['userfile']['name']))) exit;
 		}
 		header("Location :".get_filename()."?dir=".$post_dir);
 	}
