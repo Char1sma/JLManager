@@ -12,13 +12,16 @@
 	global $base_dir,$post_dir;
 	global $logged;
 	$base_dir=dirname(__FILE__);
-	/* __DIR__是PHP5.3新增的魔术语法，代表当前文件所在路径 */
+	
+	//各种功能函数
 	function get_filename() {
 		//取当前文件名
 		$url = $_SERVER['PHP_SELF'];
 		return substr($url,strrpos($url,'/')+1);
 	}
-	
+	function msgbox($message) {
+		echo "<script language=\"JavaScript\">alert(\"$message\");</script>"; 
+	}
 	//POST
 	if(isset($_POST['password'])) {
 		//判断是否提交了密码
@@ -32,6 +35,8 @@
 		if ($_FILES['userfile']['error']>0) exit;
 		if (is_uploaded_file($_FILES['userfile']['tmp_name'])) {
 			if(!move_uploaded_file($_FILES['userfile']['tmp_name'],str_replace("//","/",$base_dir.$post_dir."/".$_FILES['userfile']['name']))) exit;
+			unset($_FILES['userfile']);
+			msgbox("文件上传成功");
 		}
 		header("Location :".get_filename()."?dir=".$post_dir);
 	}
@@ -110,6 +115,12 @@
 		}
 	-->
 	</style>
+	<script language="javascript">
+		function bodyOnload () {
+		}
+		function ShowLayer(cur_div) {
+		}
+	</script>
 <?php if ($logged) { ?>
 		<div class="nav">
 			<ul class="menu">
@@ -120,7 +131,7 @@
 		</div>
 <?php } ?>
 </head>
-<body>
+<body onload="bodyOnload()">
 <?php
 	if (!$logged) {
 ?>
@@ -136,10 +147,30 @@
 	} else if ($logged) {
 ?>
 	<div style="display:none">
-		<form action="<?php get_filename()."?dir=".$post_dir ?>" method="post">
-			<!-- 删除文件POST FORM -->
-			<input type="" />
-		</form>
+		<div class="unset_file">
+			<form action="<?php get_filename()."?dir=".$post_dir ?>" method="post">
+				<!-- 删除文件POST FORM -->
+				<input type="" />
+			</form>
+		</div>
+		<div class="rename_file">
+			<form action="<?php get_filename()."?dir=".$post_dir ?>" method="post">
+				<input type="text" value="" />
+				<input type="submit" />
+			</form>
+		</div>
+		<div class="zip_file">
+			<form action="<?php get_filename()."?dir=".$post_dir ?>" method="post">
+				<input type="text" value="" />
+				<input type="submit" />
+			</form>
+		</div>
+		<div class="chmod_file">
+			<form action="<?php get_filename()."?dir=".$post_dir ?>" method="post">
+				<input type="text" value="" />
+				<input type="submit" />
+			</form>
+		</div>
 	</div>
 	<div class="file_manager">
 	<form action="<?php get_filename() ?>" method="post" enctype="multipart/form-data" />
@@ -163,10 +194,12 @@
 		if ($filename == ".") continue;
 			$filesize = NULL;
 			$operation = "<span class=\"menu\"><img src=\"".__MENU_BUTTON__."\" /></span>
-						  <span class=\"submenu\"><a href=\"\">改名</a></span>
-						  <span class=\"submenu\"><a href=\"\">删除</a></span>
-						  <span class=\"submenu\"><a href=\"\">打包</a></span>
-						  <span class=\"submenu\"><a href=\"\">权限</a></span>";
+						  <div class=\"submenu\">
+							<span><a href=\"\">改名</a></span>
+							<span><a href=\"\">删除</a></span>
+							<span><a href=\"\">打包</a></span>
+							<span><a href=\"\">权限</a></span>
+						  </div>";
 			switch (is_dir(str_replace("/","\\",$base_dir).str_replace("/","\\",$post_dir)."\\".$filename)) {
 				case true:
 				if ($filename == "..") {
@@ -194,4 +227,3 @@
 ?>	</tbody>
 	</table>
 </body>
-	
